@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html">
+<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+<head>
+    <meta charset="UTF-8">
+    <title>Detail parameters</title>
+    <style>
+        input[type="submit"] {
+            margin-left: 15px ;
+            margin-top: 10px ;
+        }
+        input[type="file"]{
+            margin-left: 10px;
+        }
+        h1{
+            margin-left:5px;
+
+        }
+        h3{
+            margin-left:10px;
+
+        }
+        label{
+            margin-left:15px;
+        }
+        body{
+            background-size: cover;
+            -webkit-background-size: cover;
+            -moz-background-size: cover;
+            -o-background-size: cover;
+        }
+        </style>
+</head>
+<body background="/media/images3.jpg">
+ {% if param %}
+    <h1>Detail parameters </h1>
+    <h3>{{param.name}}</h3>
+            <label>Description</label>
+            <p></p>
+            <textarea style="margin-left: 20px;" rows="5" cols="40" readonly>{{ param.description}}</textarea>
+            <p></p>
+            <label>Size of block orientation: </label> {{ param.size_of_block_orientation}}
+            <p></p>
+            <label>Size of block Gabor: </label> {{ param.size_of_block_gabor}}
+            <p></p>
+            <label>Sigma: </label> {{ param.sigma}}
+            <p></p>
+            <label>Lambda: </label> {{ param.var_lambda}}
+            <p></p>
+            <label>Gamma: </label> {{ param.gamma}}
+            <p></p>
+            <label>Number of inputs Basic NN: </label> {{ param.input_basic}}
+            <p> </p>
+            <label>Number of outputs Basic NN: </label> {{ param.output_basic}}
+            <p> </p>
+            <label>Number of layers Basic NN: </label> {{ param.layers_basic}}
+            <p> </p>
+            <label>Number of hidden neurons for Basic NN: </label> {{ param.neurons_hidden1}}
+            <p> </p>
+            <label>Number of inputs Complex NN: </label> {{ param.input_complex}}
+            <p> </p>
+            <label>Number of outputs Complex NN: </label> {{ param.output_complex}}
+            <p> </p>
+            <label>Number of layers Complex NN: </label> {{ param.layers_complex}}
+            <p> </p>
+            <label>Number of hidden neurons for Complex NN: </label> {{ param.neurons_hidden2}}
+            <p> </p>
+            <label>Desired error: </label> {{ param.desired_error}}
+            <p> </p>
+            <label>Max number of epochs: </label> {{ param.max_epochs}}
+            <p> </p>
+            <label >Activation function hidden: </label>
+            <p id="fann_set_activation_function_hidden"></p>
+            <script>
+            var func;
+            switch ({{param.fann_set_activation_function_hidden}}) {
+                case 0:
+                    func = "FANN_LINEAR";
+                    break;
+                case 1:
+                    func = "FANN_THRESHOLD";
+                    break;
+                case 2:
+                    func = "FANN_THRESHOLD_SYMMETRIC";
+                    break;
+                case 3:
+                    func = "FANN_SIGMOID";
+                    break;
+                case 4:
+                    func = "FANN_SIGMOID_STEPWISE";
+                    break;
+                case 5:
+                    func = "FANN_SIGMOID_SYMMETRIC";
+                    break;
+                case  6:
+                    func = "FANN_SIGMOID_SYMMETRIC_STEPWISE";
+                    break;
+                case  7:
+                    func = "FANN_GAUSSIAN";
+                    break;
+                case  8:
+                    func = "FANN_GAUSSIAN_SYMMETRIC";
+                    break;
+                case  9:
+                    func = "FANN_GAUSSIAN_STEPWISE";
+                    break;
+                case  10:
+                    func = "FANN_ELLIOT";
+                    break;
+                case  11:
+                    func = "FANN_ELLIOT_SYMMETRIC";
+                    break;
+                case  12:
+                    func = "FANN_LINEAR_PIECE";
+                    break;
+                case  13:
+                    func = "FANN_LINEAR_PIECE_SYMMETRIC";
+                    break;
+                case  14:
+                    func = "FANN_SIN_SYMMETRIC";
+                    break;
+                case  15:
+                    func = "FANN_COS_SYMMETRIC";
+                    break;
+                case  16:
+                    func = "FANN_SIN";
+                    break;
+                case  17:
+                    func = "FANN_COS";
+                    break;
+            }
+
+            document.getElementById("fann_set_activation_function_hidden").innerHTML =  func;
+            document.getElementById("fann_set_activation_function_hidden").style.margin = "0px 30px";
+
+            </script>
+
+            <p></p>
+            <label >Activation function output: </label>
+            <p id="fann_set_activation_function_output"></p>
+            <script>
+            var func;
+            switch ({{param.fann_set_activation_function_hidden}}) {
+                case 0:
+                    func = "FANN_LINEAR";
+                    break;
+                case 1:
+                    func = "FANN_THRESHOLD";
+                    break;
+                case 2:
+                    func = "FANN_THRESHOLD_SYMMETRIC";
+                    break;
+                case 3:
+                    func = "FANN_SIGMOID";
+                    break;
+                case 4:
+                    func = "FANN_SIGMOID_STEPWISE";
+                    break;
+                case 5:
+                    func = "FANN_SIGMOID_SYMMETRIC";
+                    break;
+                case  6:
+                    func = "FANN_SIGMOID_SYMMETRIC_STEPWISE";
+                    break;
+                case  7:
+                    func = "FANN_GAUSSIAN";
+                    break;
+                case  8:
+                    func = "FANN_GAUSSIAN_SYMMETRIC";
+                    break;
+                case  9:
+                    func = "FANN_GAUSSIAN_STEPWISE";
+                    break;
+                case  10:
+                    func = "FANN_ELLIOT";
+                    break;
+                case  11:
+                    func = "FANN_ELLIOT_SYMMETRIC";
+                    break;
+                case  12:
+                    func = "FANN_LINEAR_PIECE";
+                    break;
+                case  13:
+                    func = "FANN_LINEAR_PIECE_SYMMETRIC";
+                    break;
+                case  14:
+                    func = "FANN_SIN_SYMMETRIC";
+                    break;
+                case  15:
+                    func = "FANN_COS_SYMMETRIC";
+                    break;
+                case  16:
+                    func = "FANN_SIN";
+                    break;
+                case  17:
+                    func = "FANN_COS";
+                    break;
+            }
+
+            document.getElementById("fann_set_activation_function_output").innerHTML =  func;
+            document.getElementById("fann_set_activation_function_output").style.margin = "0px 30px";
+
+            </script>
+        {% else %}
+            <h4>No parameters to show.</h4>
+        {% endif %}
+<br>
+<form action="{% url 'detail_delete' param.id %}" method = "post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <input type="submit" value="Delete" data-toggle="tooltip" title="Delete parameters!" class="btn btn-info"/>
+
+</form>
+<br>
+<a href="{% url 'list' %}" style="margin-left:10px;" data-toggle="tooltip" title="Back to Homepage">back to homepage</a>
+<br><br>
+</body>
+</html>

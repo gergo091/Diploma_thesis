@@ -1,0 +1,16 @@
+Django==1.8
+Pillow==2.8.1
+SQLAlchemy==0.9.9
+amqp==1.4.6
+anyjson==0.3.3
+billiard==3.3.0.19
+celery==3.1.17
+djangorestframework==2.4.4
+drf-compound-fields==0.2.2
+gnureadline==6.3.3
+ipython==3.1.0
+kombu==3.0.24
+psycopg2==2.6
+pytz==2015.2
+wsgiref==0.1.2
+yolk==0.4.3

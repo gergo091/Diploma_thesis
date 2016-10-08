@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html">
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+        <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+        <link rel="stylesheet" href="http://cdn.datatables.net/1.10.2/css/jquery.dataTables.min.css"></style>
+        <script type="text/javascript" src="http://cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>
+        <meta charset="utf-8">
+        <meta http-equiv="refresh" content="60">
+        <title>Fingerprints processing with NN</title>
+        <style>
+        ul {
+            display: block;
+            list-style-type: none;
+            margin-top: 1em;
+            margin-bottom: 1 em;
+            margin-left: 0;
+            margin-right: 0;
+            padding-left: 40px;
+        }
+        input[type="submit"] {
+            margin-left: 15px ;
+            margin-top: 10px ;
+        }
+        input[type="file"]{
+            margin-left: 10px;
+        }
+        h2{
+            margin-left:5px;
+
+        }
+        body{
+            background-size: cover;
+            -webkit-background-size: cover;
+            -moz-background-size: cover;
+            -o-background-size: cover;
+        }
+        button.accordion {
+            background-color: #eee;
+            color: #444;
+            cursor: pointer;
+            padding: 18px;
+            width: 100%;
+            text-align: left;
+            border: none;
+            outline: none;
+            transition: 0.4s;
+    }
+        /* Add a background color to the button if it is clicked on (add the .active class with JS), and when you move the mouse over it (hover) */
+        button.accordion.active, button.accordion:hover {
+            background-color: #ddd;
+        }
+
+        /* Style the accordion panel. Note: hidden by default */
+        div.panel {
+            padding: 0 18px;
+            background-color: white;
+            display: none;
+        }
+
+        /* The "show" class is added to the accordion panel when the user clicks on one of the buttons. This will show the panel content */
+        div.panel.show {
+            display: block !important;
+        }
+        </style>
+    </head>
+
+    <body background="/media/images3.jpg">
+
+    <div class="jumbotron">
+        <h2>Fingerprint processing</h2>
+        <p style="margin-left: 5px;">Open source network system for effective recognition of minutiae in fingerprints – with method neural network</p>
+    </div>
+
+        {% if alert %}
+            <div class="alert alert-success">
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                <strong>Success! </strong> {{alert}}
+            </div>
+        {% endif %}
+
+    <div class="row">
+        <div class="col-sm-4">
+
+    <h3 style="margin-left: 10px;">Upload image</h3>
+
+    <!-- Upload form. Note enctype attribute! -->
+            <form action="{% url 'list' %}" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <p>{{ form.non_field_errors }}</p>
+
+                <p style="padding-left: 10px;">{{ form.docfile.label_tag }} {{ form.docfile.help_text }}</p>
+
+                <p>
+                    {{ form.docfile.errors }}
+                    {{ form.docfile }}
+                </p>
+
+                <br>
+            <p><input type="submit" value="Upload" data-toggle="tooltip" title="Upload new image file!" class="btn btn-info"/></p>
+            </form>
+            </div>
+
+        <div class="col-sm-4">
+    <!-- List of uploaded documents -->
+    <h3 style="margin-left:10px;">List of images:</h3>
+        <form action="{% url 'runtask' %}" method="post">
+            {% csrf_token %}
+        {% if documents %}
+            <ul>
+                {% for document in documents %}
+                    <!--<li><a href="{{ document.docfile.url }}">{{ document.docfile.name }}</a></li><-->
+                    <input type="radio" name="document" id="document{{ forloop.counter }}" value="{{ document.id }}"/>
+                    <label for="document{{ forloop.counter }}">
+                        <a href="{{ document.docfile.url }}" data-toggle="tooltip" title="Download/View image!">{{ document.docfile.name }}</a></label><br />
+                    </a></li>
+                    <!--<img id="myImg" src="/media/{{ document.docfile }}" alt="{{ document.docfile }}" width="300" height="300" style="margin-left: 25px;">-->
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No documents.</p>
+        {% endif %}
+
+            <br>
+            <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#demo" style="margin-left: 15px;">Uploaded images</button>
+            <div id="demo" class="collapse">
+                {% for document in documents %}
+                <a href="/media/{{ document.docfile }}"><img src="/media/{{ document.docfile }}" class="img-thumbnail" alt="{{ image }}" width="150" height="100"
+                                                             data-toggle="tooltip" title="{{ document }}"></a>
+                {% endfor %}
+            </div>
+            <br>
+            </div>
+
+        <div class="col-sm-4">
+        <h3 style="margin-left: 5px;" >Parameters:</h3>
+        {% if param %}
+            <ul>
+                {% for par in param %}
+                    <!--<li><a href="{{ document.docfile.url }}">{{ document.docfile.name }}</a></li><-->
+                    <input type="radio" name="algorithm" id="par{{ forloop.counter }}" value="{{ par.id }}"  />
+                    <label for="par{{ forloop.counter }}">
+                        <a href="{% url 'detail' par.id %}" data-toggle="tooltip" title="{{ par.description }}">{{ par.name }}</a></label><br /></li>
+                    </a></li>
+                {% endfor %}
+            </ul><br>
+        {% else %}
+            <p>No parameters.</p>
+        {% endif %}
+            <a href="{%url 'add_params' %}" style="margin-left:15px;" data-toggle="tooltip" title="Set new parameters for task!"><strong>Set new parameters</strong></a><br>
+            </div>
+        </div>
+
+    <br>
+            <div class="checkbox">
+                <label style="margin-left: 20px;"><input type="checkbox" name="train" id="train">Train Neural Network - create and save new netfiles for FANN</label>
+            </div>
+
+            <input type="submit" id="task_run" value="Run task" data-toggle="tooltip" title="For running new task select image and parameters" class="btn btn-info"/>
+        </form>
+    <br>
+
+
+    <br>
+    <form action="{% url 'image_delete' %}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <label for="sel2" style="margin-left: 10px;">Select image for delete:</label><p>
+        <select class="form" id="sel2" name="image" style="margin-left: 15px;" size="1">
+            {% for document in documents %}
+                <option value="{{ document.id }}" name="image">{{ document.docfile.name }}</option>
+            {% endfor %}
+
+      </select>
+
+        <input type="submit" value="Delete image" data-toggle="tooltip" title="Delete selected image!" class="btn btn-info"/>
+
+    </form>
+    <br>
+        <div class="container" style="margin-left:10px;">
+            <button class="accordion"><strong>Task list</strong></button>
+            <div class="panel">
+                {% if tasks %}
+                <table id="myTable" class="table table-striped">
+                    <thead><th>Task ID</th><th>Image</th><th>State</th><th>Algorithm parameters</th><th>Date</th><th>Action</th></thead>
+                    {% for task in tasks %}
+                    <tr>
+                        <td>
+                            {{ task.id}}
+                        </td>
+                        <td>
+                            {{task.image}}
+                            <!--<img src={{task.image}} class="img-thumbnail" alt={{task.image}} width="20" height="20">-->
+                        </td>
+                        <td>
+                            <p id={{task.id}}></p>
+                            <script>
+                                if ({{ task.status }} < 2) {
+                                    document.getElementById({{task.id}}).innerHTML = "RUNNING";
+                                } else if ({{ task.status }} > 1){
+                                    document.getElementById({{task.id}}).innerHTML = "COMPLETED";
+                                }
+                            </script>
+                        </td>
+                        <td>
+                            {{task.task_params}}
+                        </td>
+                        <td>
+                            {{task.date}}
+                        </td>
+                        <td>
+                            <a href="{%url 'output' task.id %}" style="margin-left:10px;" data-toggle="tooltip" title="Output details">Detail</a>
+                            <a href="{%url 'task_delete' task.id %}" style="margin-left:10px;" data-toggle="tooltip" title="Delete">Delete</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            {% endif %}
+        </div>
+    </div>
+    <br><br>
+    <br><br>
+    <script>
+    $(document).ready(function(){
+        $('#myTable').dataTable();
+    });
+    </script>
+    <script>
+    var acc = document.getElementsByClassName("accordion");
+    var i;
+
+    for (i = 0; i < acc.length; i++) {
+        acc[i].onclick = function(){
+            this.classList.toggle("active");
+            this.nextElementSibling.classList.toggle("show");
+        }
+    }
+    </script>
+    </body>
+</html>

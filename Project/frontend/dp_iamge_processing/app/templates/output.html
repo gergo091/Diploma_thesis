@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="refresh" content="30">
+    <title>Task details - output </title>
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+      <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <style>
+    body{
+        background-size: cover;
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+    }
+    p{
+    margin-left: 10px;
+    }
+    #myImg {
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+#myImg:hover {opacity: 0.7;}
+
+/* The Modal (background) */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    padding-top: 100px; /* Location of the box */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.9); /* Black w/ opacity */
+}
+
+/* Modal Content (image) */
+.modal-content {
+    margin: auto;
+    display: block;
+    width: 80%;
+    max-width: 700px;
+}
+
+/* Caption of Modal Image */
+#caption {
+    margin: auto;
+    display: block;
+    width: 80%;
+    max-width: 700px;
+    text-align: center;
+    color: #ccc;
+    padding: 10px 0;
+    height: 150px;
+}
+
+/* Add Animation */
+.modal-content, #caption {
+    -webkit-animation-name: zoom;
+    -webkit-animation-duration: 0.6s;
+    animation-name: zoom;
+    animation-duration: 0.6s;
+}
+
+@-webkit-keyframes zoom {
+    from {-webkit-transform:scale(0)}
+    to {-webkit-transform:scale(1)}
+}
+
+@keyframes zoom {
+    from {transform:scale(0)}
+    to {transform:scale(1)}
+}
+
+/* The Close Button */
+.close {
+    position: absolute;
+    top: 15px;
+    right: 35px;
+    color: #f1f1f1;
+    font-size: 40px;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.close:hover,
+.close:focus {
+    color: #bbb;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* 100% Image Width on Smaller Screens */
+@media only screen and (max-width: 700px){
+    .modal-content {
+        width: 100%;
+    }
+}
+  .carousel-inner > .item > img,
+  .carousel-inner > .item > a > img {
+      width: 50%;
+      margin: auto;
+  }
+    </style>
+
+</head>
+<body background="/media/images3.jpg">
+<div class="page-header">
+    <h1 style="margin-left: 10px;">Task details - output </h1>
+    <h3 style="margin-left: 15px;">Task ID: {{ task.id }}</h3>
+    <h4 id={{task.id}}></h4>
+    <h4 style="margin-left: 15px;">{{ task.date }}</h4>
+</div>
+<script>
+    if ({{ task.status }} < 2) {
+        document.getElementById({{task.id}}).innerHTML = "Status: RUNNING";
+        document.getElementById({{task.id}}).style.margin = "0px 15px";
+    } else {
+        document.getElementById({{task.id}}).innerHTML = "Status: COMPLETED";
+        document.getElementById({{task.id}}).style.margin = "0px 15px";
+    }
+</script>
+
+<div class="row">
+<div class="col-sm-4">
+    <h2 style="margin-left: 20px;">Input: </h2>
+    <p style="margin-left: 35px;">Fingerprint processing input image:</p>
+<!-- Trigger the Modal -->
+<img id="myImg" src="/media/{{ task.image }}" alt="{{ task.image }}" width="300" height="300" style="margin-left: 25px;">
+
+<!-- The Modal -->
+<div id="myModal" class="modal">
+
+  <!-- The Close Button -->
+  <span class="close" onclick="document.getElementById('myModal').style.display='none'">&times;</span>
+
+  <!-- Modal Content (The Image) -->
+  <img class="modal-content" id="img01">
+
+  <!-- Modal Caption (Image Text) -->
+  <div id="caption"></div>
+</div>
+</div>
+    <div class="col-sm-4">
+        <h3>Parameters for Neural network:</h3>
+        <p>Number of inputs Basic NN: {{ task.task_params.input_basic }}</p>
+        <p>Number of outputs Basic NN: {{ task.task_params.output_basic }}</p>
+        <p>Number of layers Basic NN: {{ task.task_params.layers_basic }}</p>
+        <p>Number of hidden neurons for Basic NN: {{ task.task_params.neurons_hidden1 }}</p>
+
+        <p>Number of inputs Complex NN: {{ task.task_params.input_complex }}</p>
+        <p>Number of outputs Complex NN: {{ task.task_params.output_complex }}</p>
+        <p>Number of layers Complex NN: {{ task.task_params.layers_complex }}</p>
+        <p>Number of hidden neurons for Complex NN: {{ task.task_params.neurons_hidden2 }}</p>
+
+        <p>Desired error: {{ task.task_params.desired_error }}</p>
+        <p>Max number of epochs: {{ task.task_params.max_epochs }}</p>
+        <p id="fann_set_activation_function_hidden"></p>
+            <script>
+            var func;
+            switch ({{ task.task_params.fann_set_activation_function_hidden}}) {
+                case 0:
+                    func = "FANN_LINEAR";
+                    break;
+                case 1:
+                    func = "FANN_THRESHOLD";
+                    break;
+                case 2:
+                    func = "FANN_THRESHOLD_SYMMETRIC";
+                    break;
+                case 3:
+                    func = "FANN_SIGMOID";
+                    break;
+                case 4:
+                    func = "FANN_SIGMOID_STEPWISE";
+                    break;
+                case 5:
+                    func = "FANN_SIGMOID_SYMMETRIC";
+                    break;
+                case  6:
+                    func = "FANN_SIGMOID_SYMMETRIC_STEPWISE";
+                    break;
+                case  7:
+                    func = "FANN_GAUSSIAN";
+                    break;
+                case  8:
+                    func = "FANN_GAUSSIAN_SYMMETRIC";
+                    break;
+                case  9:
+                    func = "FANN_GAUSSIAN_STEPWISE";
+                    break;
+                case  10:
+                    func = "FANN_ELLIOT";
+                    break;
+                case  11:
+                    func = "FANN_ELLIOT_SYMMETRIC";
+                    break;
+                case  12:
+                    func = "FANN_LINEAR_PIECE";
+                    break;
+                case  13:
+                    func = "FANN_LINEAR_PIECE_SYMMETRIC";
+                    break;
+                case  14:
+                    func = "FANN_SIN_SYMMETRIC";
+                    break;
+                case  15:
+                    func = "FANN_COS_SYMMETRIC";
+                    break;
+                case  16:
+                    func = "FANN_SIN";
+                    break;
+                case  17:
+                    func = "FANN_COS";
+                    break;
+            }
+
+            document.getElementById("fann_set_activation_function_hidden").innerHTML = "Activation function hidden: " + func;
+
+            </script>
+
+                <p id="fann_set_activation_function_output"></p>
+            <script>
+            var func;
+            switch ({{ task.task_params.fann_set_activation_function_output}}) {
+                case 0:
+                    func = "FANN_LINEAR";
+                    break;
+                case 1:
+                    func = "FANN_THRESHOLD";
+                    break;
+                case 2:
+                    func = "FANN_THRESHOLD_SYMMETRIC";
+                    break;
+                case 3:
+                    func = "FANN_SIGMOID";
+                    break;
+                case 4:
+                    func = "FANN_SIGMOID_STEPWISE";
+                    break;
+                case 5:
+                    func = "FANN_SIGMOID_SYMMETRIC";
+                    break;
+                case  6:
+                    func = "FANN_SIGMOID_SYMMETRIC_STEPWISE";
+                    break;
+                case  7:
+                    func = "FANN_GAUSSIAN";
+                    break;
+                case  8:
+                    func = "FANN_GAUSSIAN_SYMMETRIC";
+                    break;
+                case  9:
+                    func = "FANN_GAUSSIAN_STEPWISE";
+                    break;
+                case  10:
+                    func = "FANN_ELLIOT";
+                    break;
+                case  11:
+                    func = "FANN_ELLIOT_SYMMETRIC";
+                    break;
+                case  12:
+                    func = "FANN_LINEAR_PIECE";
+                    break;
+                case  13:
+                    func = "FANN_LINEAR_PIECE_SYMMETRIC";
+                    break;
+                case  14:
+                    func = "FANN_SIN_SYMMETRIC";
+                    break;
+                case  15:
+                    func = "FANN_COS_SYMMETRIC";
+                    break;
+                case  16:
+                    func = "FANN_SIN";
+                    break;
+                case  17:
+                    func = "FANN_COS";
+                    break;
+            }
+
+            document.getElementById("fann_set_activation_function_output").innerHTML = "Activation function output: " + func;
+
+            </script>
+
+    </div>
+<div class="col-sm-4">
+    <h3>Parameters for preprocessing:</h3>
+      <p>Size of block for orientation map: {{ task.task_params.size_of_block_orientation }}</p>
+      <p>Size of block for Gabor filter: {{ task.task_params.size_of_block_gabor }}</p>
+    <p>Sigma: {{ task.task_params.sigma }}</p>
+    <p>Lambda: {{ task.task_params.var_lambda }}</p>
+    <p>Gamma: {{ task.task_params.gamma }}</p>
+    </div>
+    </div>
+
+{% if images_other %}
+<div style="margin-left: 20px;">
+    <h2>Outputs: </h2>
+        <p>Fingerprint processing outputs:</p>
+        {% for image in images_other %}
+            <a href="/media/tasks/{{ task.id }}/output/{{ image }}"><img src="/media/tasks/{{ task.id }}/output/{{ image }}"
+                                                                         class="img-thumbnail" alt="{{ image }}" width="304" height="236"
+            data-toggle="tooltip" title="{{ image }}"></a>
+        {% endfor %}
+    {% endif %}
+    </div>
+<br>
+
+{% if images_some %}
+<div style="margin-left: 20px;">
+    <h2>Outputs: </h2>
+        <p>Fingerprint processing outputs:</p>
+<div id="myCarousel" class="carousel slide" data-ride="carousel">
+    <ol class="carousel-indicators">
+        <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+        <li data-target="#myCarousel" data-slide-to="1"></li>
+        </ol>
+
+    <!-- Wrapper for slides -->
+    <div class="carousel-inner" role="listbox">
+            <div class="item active">
+                <img src="/media/tasks/{{ task.id }}/output/1output_basic_nn.jpg" alt="Basic NN" width="200" height="150"
+                data-toggle="tooltip" title="Output basic neural network">
+            </div>
+        <div class="item">
+            <img src="/media/tasks/{{ task.id }}/output/2output_complex_nn.jpg" alt="Complex NN" width="200" height="150"
+            data-toggle="tooltip" title="Output complex neural network">
+        </div>
+    </div>
+
+        <!-- Left and right controls -->
+        <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
+            <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+            <span class="sr-only">Previous</span>
+        </a>
+        <a class="right carousel-control" href="#myCarousel" role="button" data-slide="next">
+            <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+            <span class="sr-only">Next</span>
+        </a>
+    </div>
+    {% endif %}
+
+    {% if images_all %}
+<div style="margin-left: 20px;">
+    <h2>Outputs: </h2>
+        <p>Fingerprint processing outputs:</p>
+<div id="myCarousell" class="carousel slide" data-ride="carousel">
+    <ol class="carousel-indicators">
+        <li data-target="#myCarousell" data-slide-to="0" class="active"></li>
+        <li data-target="#myCarousell" data-slide-to="1"></li>
+        <li data-target="#myCarousell" data-slide-to="2"></li>
+        <li data-target="#myCarousell" data-slide-to="3"></li>
+        <li data-target="#myCarousell" data-slide-to="4"></li>
+        <li data-target="#myCarousell" data-slide-to="5"></li>
+        <li data-target="#myCarousell" data-slide-to="6"></li>
+        <li data-target="#myCarousell" data-slide-to="7"></li>
+        <li data-target="#myCarousell" data-slide-to="8"></li>
+        <li data-target="#myCarousell" data-slide-to="9"></li>
+        <li data-target="#myCarousell" data-slide-to="10"></li>
+        </ol>
+
+    <!-- Wrapper for slides -->
+    <div class="carousel-inner" role="listbox">
+            <div class="item active">
+                <img src="/media/tasks/{{ task.id }}/output/1segmentation.jpg" alt="Segmentation" width="200" height="150"
+                data-toggle="tooltip" title="Segmentation">
+            </div>
+        <div class="item">
+            <img src="/media/tasks/{{ task.id }}/output/2raw_mask.jpg" alt="Raw mask" width="200" height="150"
+            data-toggle="tooltip" title="Raw mask">
+        </div>
+        <div class="item">
+            <img src="/media/tasks/{{ task.id }}/output/3mask.jpg" alt="Mask" width="200" height="150"
+            data-toggle="tooltip" title="Mask">
+        </div>
+        <div class="item">
+            <img src="/media/tasks/{{ task.id }}/output/4orientation_map.jpg" alt="Orientation map" width="200" height="150"
+            data-toggle="tooltip" title="Orientation map">
+        </div>
+        <div class="item">
+            <img src="/media/tasks/{{ task.id }}/output/5gabor.jpg" alt="Gabor filter" width="200" height="150"
+            data-toggle="tooltip" title="Gabor filter">
+        </div>
+        <div class="item">
+            <img src="/media/tasks/{{ task.id }}/output/6binarization.jpg" alt="Binarization" width="200" height="150"
+            data-toggle="tooltip" title="Binarization">
+        </div>
+        <div class="item">
+            <img src="/media/tasks/{{ task.id }}/output/7thinning.jpg" alt="Thinning image" width="200" height="150"
+            data-toggle="tooltip" title="Thinning">
+        </div>
+        <div class="item">
+            <img src="/media/tasks/{{ task.id }}/output/8output_basic_nn.jpg" alt="Output NN basic" width="200" height="150"
+            data-toggle="tooltip" title="Output basic neural network">
+        </div>
+        <div class="item">
+            <img src="/media/tasks/{{ task.id }}/output/9output_basic_nn_original.jpg" alt="Output NN basic original" width="200" height="150"
+            data-toggle="tooltip" title="Output original image basic neural network">
+        </div>
+        <div class="item">
+            <img src="/media/tasks/{{ task.id }}/output/91output_complex_nn.jpg" alt="Output NN Complex" width="200" height="150"
+            data-toggle="tooltip" title="Output complex neural network">
+        </div>
+    </div>
+
+        <!-- Left and right controls -->
+        <a class="left carousel-control" href="#myCarousell" role="button" data-slide="prev">
+            <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+            <span class="sr-only">Previous</span>
+        </a>
+        <a class="right carousel-control" href="#myCarousell" role="button" data-slide="next">
+            <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+            <span class="sr-only">Next</span>
+        </a>
+    </div>
+    {% endif %}
+<br>
+<script>
+// Get the modal
+var modal = document.getElementById('myModal');
+
+// Get the image and insert it inside the modal - use its "alt" text as a caption
+var img = document.getElementById('myImg');
+var modalImg = document.getElementById("img01");
+var captionText = document.getElementById("caption");
+img.onclick = function(){
+    modal.style.display = "block";
+    modalImg.src = this.src;
+    modalImg.alt = this.alt;
+    captionText.innerHTML = this.alt;
+}
+
+// Get the <span> element that closes the modal
+var span = document.getElementsByClassName("close")[0];
+
+// When the user clicks on <span> (x), close the modal
+span.onclick = function() {
+    modal.style.display = "none";
+}
+</script>
+
+<br>
+<div class="row">
+    <div class="col-sm-6">
+        <label style="margin-left: 10px;" for="report">Output log:</label><br>
+        <iframe src="/media/tasks/{{ task.id }}/report.txt" width="600" height="200px" style="margin-left:10px;" id="report"></iframe>
+    </div>
+    <div class="col-sm-6">
+        <a href="/media/basic.net" download>
+    <p><button type="button" id="download_netBasic" data-toggle="tooltip" title="Download basic net files!"
+               class="btn btn-info btn-lg">Download basic net files</button></p></a>
+        <a href="/media/complex.net" download>
+    <p><button type="button" id="download_netcomplex" data-toggle="tooltip" title="Download complex net files!"
+               class="btn btn-info btn-lg">Download complex net files</button></p></a>
+        <a href="/media/outputs.zip" download>
+    <p><button type="button" id="download" data-toggle="tooltip" title="Download all output images as a zip!"
+               class="btn btn-info btn-lg">Download all output images</button></p></a>
+    </div>
+    </div>
+<br><br>
+<a href="{% url 'list' %}" style="margin-left:10px;" data-toggle="tooltip" title="Back to Homepage">back to homepage</a>
+<br><br><br>
+</body>
+</html>

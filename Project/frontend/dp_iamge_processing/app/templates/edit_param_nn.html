@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <head>
+        <title>Parameters for application</title>
+        <style>
+            h1{
+                margin-left:5px;
+
+            }
+            h3{
+                margin-left:5px;
+
+            }
+            label{
+                margin-left: 10px;
+            }
+
+        </style>
+
+    </head>
+    <input style="background-color:lightgrey;">
+        <h3>Nastavene parametre</h3>
+
+     </h3>
+        {% if param %}
+            <label>Parameters title: {{ param.name}}</label>
+            <p></p>
+            <label>Size of block orientation: {{ param.size_of_block_orientation}}</label>
+            <p></p>
+            <label>Size of block Gabor: {{ param.size_of_block_gabor}}</label>
+            <p></p>
+            <label>Sigma:  {{ param.sigma}}</label>
+            <p></p>
+            <label>Lambda: {{ param.var_lambda}}</label>
+            <p></p>
+            <label>Gamma:  {{ param.gamma}}</label>
+            <p></p>
+            <label>Number of inputs Basic NN: {{ param.input_basic}}</label>
+            <p> </p>
+            <label>Number of outputs Basic NN: {{ param.output_basic}}</label>
+            <p> </p>
+            <label>Number of layers Basic NN:  {{ param.layers_basic}}</label>
+            <p> </p>
+            <label>Number of hidden neurons for Basic NN:  {{ param.neurons_hidden1}}</label>
+            <p> </p>
+            <label>Number of inputs Complex NN: {{ param.input_complex}} </label>
+            <p> </p>
+            <label>Number of outputs Complex NN:  {{ param.output_complex}}</label>
+            <p> </p>
+            <label>Number of layers Complex NN:  {{ param.layers_complex}}</label>
+            <p> </p>
+            <label>Number of hidden neurons for Complex NN:  {{ param.neurons_hidden2}}</label>
+            <p> </p>
+            <label>Desired error:  {{ param.desired_error}}</label>
+            <p> </p>
+            <label>Max epochs:  {{ param.max_epochs}}</label>
+            <p></p>
+            <label>Activation function hidden: {{ param.fann_set_activation_function_hidden }}</label>
+            <p></p>
+            <label>Activation function output: {{ param.fann_set_activation_function_output }}</label>
+        {% else %}
+            <h4>No parameters to show.</h4>
+        {% endif %}
+
+        <p></p>
+    <form action="{% url "algorithm" %}" method = "post" enctype="multipart/form-data">
+            {% csrf_token %}
+    <input type="submit" value="Run"/>
+    </form>
+    </body>
+
+</html>

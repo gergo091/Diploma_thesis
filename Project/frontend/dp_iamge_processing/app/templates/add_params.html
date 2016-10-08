@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html">
+<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+<head>
+        <meta charset="utf-8">
+        <title>Setting new parameters</title>
+        <style>
+        ul {
+            display: block;
+            list-style-type: none;
+            margin-top: 1em;
+            margin-bottom: 1 em;
+            margin-left: 0;
+            margin-right: 0;
+            padding-left: 40px;
+        }
+        input[type="submit"] {
+            margin-left: 40px ;
+            margin-top: 10px ;
+        }
+        input[type="file"]{
+            margin-left: 10px;
+        }
+        h1{
+            margin-left:5px;
+
+        }
+        h3{
+            margin-left:10px;
+
+        }
+        body{
+            background-size: cover;
+            -webkit-background-size: cover;
+            -moz-background-size: cover;
+            -o-background-size: cover;
+        }
+        </style>
+    </head>
+<body background="/media/images3.jpg">
+<form action="{% url 'param' %}" method = "post" enctype="multipart/form-data">
+    {% csrf_token %}
+        <div class="col-sm-4">
+        <h3>Preprocessing parameters</h3>
+        <ul>
+            <label for="name">Parameters title: </label>
+            <li><input id="name" type="text" name="name" size="40" required></li>
+            <p></p>
+            <label for="desc">Description: </label>
+            <li><textarea id="desc" name="desc" type="text" rows="5" cols="40"></textarea></li>
+            <p></p>
+            <label for="size_of_block_orientation">Size of block orientation: </label>
+            <li><input id="size_of_block_orientation" name="size_of_block_orientation" type="number" value="31" data-toggle="tooltip" title="default 31" required></li>
+            <p></p>
+            <label for="size_of_block_gabor">Size of block Gabor: </label>
+            <li><input id="size_of_block_gabor" name="size_of_block_gabor" type="number" value="39" data-toggle="tooltip" title="default 39" required></li>
+            <p></p>
+            <label for="sigma">Sigma:  </label>
+            <li><input id="sigma" name="sigma" type="number" value="7" data-toggle="tooltip" title="default 7" required></li>
+            <p></p>
+            <label for="var_lambda">Lambda: </label>
+            <li><input id="var_lambda" name="var_lambda" type="number" value="15" data-toggle="tooltip" title="default 15" step="any" required></li>
+            <p></p>
+            <label for="gamma">Gamma:  </label>
+            <li><input id="gamma" name="gamma" type="number" value="1" data-toggle="tooltip" title="default 1" step="any" required></li>
+        </ul>
+            <br>
+            <p><input type="submit" value="Save parameters" data-toggle="tooltip" title="Save parameters!" class="btn btn-info"/></p>
+            <a href="{% url 'list' %}" style="margin-left: 40px;">back to homepage</a>
+        </div>
+    <div class="col-sm-4">
+    <h3>Neural network parameters</h3>
+        <ul>
+            <label for="input_basic">Number of inputs Basic NN: </label>
+            <li><input id="input_basic" type="number" name="input_basic" value="9" required></li>
+            <p> </p>
+            <label for="output_basic">Number of outputs Basic NN: </label>
+            <li><input id="output_basic" type="number" name="output_basic" value="2" required></li>
+            <p> </p>
+            <label for="layers_basic">Number of layers Basic NN:  </label>
+            <li><input id="layers_basic" type="number" name="layers_basic" value="3" required></li>
+            <p> </p>
+            <label for="neurons_hidden1">Number of hidden neurons for Basic NN:  </label>
+            <li><input id="neurons_hidden1" type="number" name="neurons_hidden1" value="15" required></li>
+            <p> </p>
+            <label for="input_complex">Number of inputs Complex NN: </label>
+            <li><input id="input_complex" type="number" name="input_complex" value="2601" required></li>
+            <p> </p>
+            <label for="output_complex">Number of outputs Complex NN:  </label>
+            <li><input id="output_complex" type="number" name="output_complex" value="3" required></li>
+            <p> </p>
+            <label for="layers_complex">Number of layers Complex NN:  </label>
+            <li><input id="layers_complex" type="number" name="layers_complex" value="3" required></li>
+            <p> </p>
+            <label for="neurons_hidden2">Number of hidden neurons for Complex NN:  </label>
+            <li><input id="neurons_hidden2" type="number" name="neurons_hidden2" value="3500" required></li>
+            <p> </p>
+            <label for="desired_error">Desired error:  </label>
+            <li><input id="desired_error" type="number" name="desired_error" value="0.0001" step="any" required></li>
+            <p> </p>
+            <label for="max_epochs">Max epochs:  </label>
+            <li><input id="max_epochs" type="number" name="max_epochs" value="5000" required></li>
+            <p> </p>
+            <label for="fann_set_activation_function_hidden">Set activation function hidden:  </label>
+            <li>
+                <select id="fann_set_activation_function_hidden" name="fann_set_activation_function_hidden">
+                    <option value="0">FANN_LINEAR</option>
+                    <option value="1">FANN_THRESHOLD</option>
+                    <option value="2">FANN_THRESHOLD_SYMMETRIC</option>
+                    <option value="3">FANN_SIGMOID</option>
+                    <option value="4">FANN_SIGMOID_STEPWISE</option>
+                    <option value="5">FANN_SIGMOID_SYMMETRIC</option>
+                    <option value="6">FANN_SIGMOID_SYMMETRIC_STEPWISE</option>
+                    <option value="7">FANN_THRESHOLD_SYMMETRIC</option>
+                    <option value="8">FANN_SIGMOID_SYMMETRIC_STEPWISE</option>
+                    <option value="9">FANN_GAUSSIAN</option>
+                    <option value="10">FANN_GAUSSIAN_SYMMETRIC</option>
+                    <option value="11">FANN_GAUSSIAN_STEPWISE</option>
+                    <option value="12">FANN_ELLIOT</option>
+                    <option value="13">FANN_ELLIOT_SYMMETRIC</option>
+                    <option value="14">FANN_LINEAR_PIECE</option>
+                    <option value="15">FANN_LINEAR_PIECE_SYMMETRIC</option>
+                    <option value="16">FANN_SIN_SYMMETRIC</option>
+                    <option value="17">FANN_COS_SYMMETRIC</option>
+                    <option value="18">FANN_SIN</option>
+                    <option value="19">FANN_COS</option>
+                </select>
+            </li>
+            <p></p>
+            <label for="fann_set_activation_function_output">Set activation function output:  </label>
+            <li>
+                <select id="fann_set_activation_function_output" name="fann_set_activation_function_output">
+                    <option value="0">FANN_LINEAR</option>
+                    <option value="1">FANN_THRESHOLD</option>
+                    <option value="2">FANN_THRESHOLD_SYMMETRIC</option>
+                    <option value="3">FANN_SIGMOID</option>
+                    <option value="4">FANN_SIGMOID_STEPWISE</option>
+                    <option value="5">FANN_SIGMOID_SYMMETRIC</option>
+                    <option value="6">FANN_SIGMOID_SYMMETRIC_STEPWISE</option>
+                    <option value="7">FANN_THRESHOLD_SYMMETRIC</option>
+                    <option value="8">FANN_SIGMOID_SYMMETRIC_STEPWISE</option>
+                    <option value="9">FANN_GAUSSIAN</option>
+                    <option value="10">FANN_GAUSSIAN_SYMMETRIC</option>
+                    <option value="11">FANN_GAUSSIAN_STEPWISE</option>
+                    <option value="12">FANN_ELLIOT</option>
+                    <option value="13">FANN_ELLIOT_SYMMETRIC</option>
+                    <option value="14">FANN_LINEAR_PIECE</option>
+                    <option value="15">FANN_LINEAR_PIECE_SYMMETRIC</option>
+                    <option value="16">FANN_SIN_SYMMETRIC</option>
+                    <option value="17">FANN_COS_SYMMETRIC</option>
+                    <option value="18">FANN_SIN</option>
+                    <option value="19">FANN_COS</option>
+                </select>
+            </li>
+    </ul>
+    </div>
+    </form>
+
+</div>
+<br><br>
+</body>
