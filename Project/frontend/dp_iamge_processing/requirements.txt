@@ -1,4 +1,4 @@
-Django==1.8
+Django==1.11.23
 Pillow==2.8.1
 SQLAlchemy==0.9.9
 amqp==1.4.6
